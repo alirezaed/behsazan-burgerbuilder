@@ -1,10 +1,11 @@
 import React from 'react';
 import Header from './Header/Header';
+import classes from './Layout.module.css';
 
 function Layout(props){
-    return <div>
+    return <div className={classes.container}>
         <Header />
-        <div>
+        <div className={classes.mainbody}>
             {props.children}
         </div>
     </div>

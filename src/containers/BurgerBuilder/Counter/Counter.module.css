@@ -1,0 +1,19 @@
+.container{
+    width: 200px;
+}
+
+.container > .label{
+    width: 70px;
+    display: inline-block;
+}
+
+.container > .count{
+    font-size: 1.2em;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0px 8px;
+}
+
+.container > button{
+    margin: 2px;
+}
