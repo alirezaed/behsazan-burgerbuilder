@@ -1,0 +1,18 @@
+.tablink{
+    padding: 8px;
+    margin: 4px;
+    background-color: white;
+    border-radius: 8px;
+    color: darkgrey;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tablink:hover{
+    color: black;
+}
+
+.active{
+    color: black;
+    background-color: chocolate;
+}

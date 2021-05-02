@@ -3,6 +3,7 @@
 }
 
 .mainbody{
-    height: calc(100vh - 90px);
+    height: calc(100vh - 130px);
     overflow: auto;
+    padding: 20px;
 }
