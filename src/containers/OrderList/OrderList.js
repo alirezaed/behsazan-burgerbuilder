@@ -7,17 +7,17 @@ function OrderList(){
     const [orders,setOrders] = useState([]);
 
     useEffect(()=>{
-        // axios.post('order/GetAllOrders')
-        // .then(result=>{
-        //     setOrders(result.data);
-        // })
+        axios.post('order/GetAllOrders')
+        .then(result=>{
+            setOrders(result.data);
+        })
 
     },[]);
 
     const columns=[
-        { index:1,field:'order_number', title:'Order Number',sortable:false,textAlign:'center' },
+        { index:1,field:'order_number', title:'Order Number',sortable:true,textAlign:'center' },
         { index:2,field:'create_date', title:'Order Date',sortable:false,textAlign:'center' },
-        { index:3,field:'total_price', title:'Price',sortable:false,textAlign:'center' },
+        { index:3,field:'total_price', title:'Price',sortable:true,textAlign:'center' },
         { index:4,field:'comments', title:'Comments',sortable:false,textAlign:'center' }
     ];
 

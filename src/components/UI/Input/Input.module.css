@@ -1,0 +1,19 @@
+.input{
+    margin: 4px;
+
+}
+.input> div:first-child{
+    margin-bottom: 2px;
+    font-size: 0.9em;
+}
+
+.input > input{
+    padding: 6px;
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid;
+    width: 100%;
+}
+.red{
+    color: red;
+}

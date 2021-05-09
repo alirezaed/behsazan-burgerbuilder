@@ -15,3 +15,20 @@
     padding: 8px;
     text-align: center;
 }
+
+.sortable{
+    cursor: pointer;
+}
+.sortable:hover{
+    background-color: gray;
+}
+
+.pagintation{
+    text-align: center;
+    margin-bottom: 10px;
+
+}
+
+.pagintation>select{
+    margin: 4px;
+}
