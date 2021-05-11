@@ -12,7 +12,7 @@ export function useInput(defaultValue,required){
     },[value]);
 
     const validate=()=>{
-        if (required && (!value || value.length ==0)){
+        if (required && (!value || value.length ===0)){
             setMessage('This field is required!');
             return false;
         }

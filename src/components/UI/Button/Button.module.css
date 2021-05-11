@@ -17,3 +17,7 @@
     background-color: gray;
     cursor: no-drop;
 }
+
+.dark{
+    background-color: blue;
+}

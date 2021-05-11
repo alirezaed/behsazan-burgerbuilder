@@ -6,9 +6,10 @@ import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../components/UI/Button/Button';
 import axios from '../../tools/fetch';
 import MessageBox from '../../components/UI/MessageBox/MessageBox';
+import {ApplicationContext} from '../../context/ApplicationContext'
 
 class BurgerBuilder extends React.Component {
-    
+    static contextType = ApplicationContext;
     initialState={
         meat:1,
         salad:1,
@@ -42,6 +43,7 @@ class BurgerBuilder extends React.Component {
     }
 
     handleResetClick=()=>{
+        console.log(this.context);
         this.setState(this.initialState);
     }
 
@@ -76,6 +78,8 @@ class BurgerBuilder extends React.Component {
             submitting:false
         });
     }
+
+    
 
     render(){
         const {meat,cheese,salad,message_type,message,submitting} = this.state;
