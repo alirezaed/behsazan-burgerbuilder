@@ -12,6 +12,7 @@ function Input(props){
             {props.required && <span className={classes.red}>*</span>}
         </div>
         <input {...props} />
+        {props.errorMessage && <div className={classes.red} >{props.errorMessage}</div>}
         </div>
 }
 

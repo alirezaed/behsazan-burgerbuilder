@@ -1,5 +1,5 @@
 import classes from './Table.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function Table(props){
 
@@ -9,6 +9,9 @@ function Table(props){
     const [pageIndex,setPageIndex] = useState(1);
     const [pageSize,setPageSize] = useState(20);
 
+    useEffect(()=>{
+        refresh();
+    },[]);
 
     const handleColumnClick=(field)=>{
         if (sortField === field){
@@ -16,15 +19,23 @@ function Table(props){
         }else{
             setSortField(field);
         }
+        refresh();
     }
+
     const handlePageSizeClick=(e)=>{
-        setPageSize(e.target.value)
+        setPageSize(e.target.value);
+        refresh();
     }
     const handlePageIndexClick=(e)=>{
-        setPageIndex(e.target.value)
+        setPageIndex(e.target.value);
+        refresh();
     }
 
     const getData=()=>{
+        if (props.onRefresh){
+            return props.data;
+        }
+
         let result = props.data.sort((a,b)=>{
             return sortOrder === 'desc' ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
         });
@@ -34,11 +45,23 @@ function Table(props){
         return result;
     }
 
+    const refresh=()=>{
+        if (props.onRefresh){
+            props.onRefresh({
+                sort_field:sortField,
+                sort_order:sortOrder,
+                page_index:pageIndex,
+                page_size:pageSize
+            });
+        }
+    }
+
     
 
     const getPageIndexes=()=>{
         const result=[];
-        const totalPages = Math.ceil(props.data.length / pageSize);
+        const totalRecords = props.onRefresh ? props.totalCount : props.data.length;
+        const totalPages = Math.ceil(totalRecords / pageSize);
         for(let i =1;i<=totalPages;i++){
             result.push(<option key={i} value={i}>{i}</option>)
         }
