@@ -1,11 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import axios from '../../tools/fetch';
 import Table from '../../components/UI/Table/Table';
+import Loading from '../../components/UI/Loading/Loading';
 
-function OrderList(){
+function reducer(currentState,action){
 
-    const [orders,setOrders] = useState([]);
-    const [totalCount,setTotalCount] = useState(0);
+    switch(action.type){
+        case 'INIT': 
+            return{
+                orders:action.payload.orders,
+                totalCount:action.payload.totalCount,
+                loading:false
+            };
+        case 'LOADING':
+            return{
+                ...currentState,
+                loading:true
+            };
+        default:return currentState;
+    }
+}
+
+
+function OrderList(props){
+
+    // const [orders,setOrders] = useState([]);
+    // const [totalCount,setTotalCount] = useState(0);
+    // const [loading,setLoading] = useState(false);
+
+    const [state,dispatch] = useReducer(reducer,{
+        orders:[],
+        totalCount:0,
+        loading:false
+    });
+
 
     const columns=[
         { index:1,field:'order_number', title:'Order Number',sortable:true,textAlign:'center' },
@@ -15,20 +43,39 @@ function OrderList(){
     ];
 
     const handleRefreshTable=(data)=>{
-        axios.post('order/GetAllOrders',data)
+        dispatch({
+            type:'LOADING'
+        });
+        //setLoading(true);
+        axios.post('safeorder/GetAllOrders',data)
         .then(result=>{
-            setOrders(result.data.list);
-            setTotalCount(result.data.total_count);
+            dispatch({
+                type:'INIT',
+                payload:{
+                    orders:result.data.list,
+                    totalCount:result.data.total_count
+                }
+            });
+            // setOrders(result.data.list);
+            // setTotalCount(result.data.total_count);
+            // setLoading(false);
+        }).catch(err=>{
+            if (err.response.status == 403){
+                props.history.push('/AccessDenied');
+                return;
+            }
         })
     }
 
+    console.log('orderListRendered');
     return <div>
+        {state.loading && <Loading />}
         <Table 
-            data={orders} 
+            data={state.orders} 
             columns={columns} 
             keyfield='order_number'
             onRefresh={handleRefreshTable}
-            totalCount={totalCount}
+            totalCount={state.totalCount}
          />
     </div>
 }

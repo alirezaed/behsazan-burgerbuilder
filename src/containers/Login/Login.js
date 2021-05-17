@@ -1,6 +1,6 @@
 
 import classes from './Login.module.css';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import {useInput} from '../../hooks/useInput';
@@ -26,9 +26,8 @@ function Login (props){
                 password:password.value
             }).then(result=>{
                 if (result.data.status){
-                    authContext.login();
-                    window.localStorage.setItem('token',result.data.message);
-                    props.history.push('/');
+                    authContext.login(result.data.message);
+                    props.history.push('/', props.location.state);
                 }
                 setIsLoading(false);
             }).catch(err=>{

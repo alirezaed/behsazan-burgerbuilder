@@ -5,13 +5,23 @@ function Table(props){
 
 
     const [sortField,setSortField] = useState(props.keyfield);
-    const [sortOrder,setSortOrder] = useState('acs');
+    const [sortOrder,setSortOrder] = useState('asc');
     const [pageIndex,setPageIndex] = useState(1);
     const [pageSize,setPageSize] = useState(20);
 
     useEffect(()=>{
+        const refresh=()=>{
+            if (props.onRefresh){
+                props.onRefresh({
+                    sort_field:'id',
+                    sort_order:sortOrder,
+                    page_index:pageIndex,
+                    page_size:pageSize
+                });
+            }
+        }
         refresh();
-    },[]);
+    },[sortOrder,pageIndex,pageSize]);
 
     const handleColumnClick=(field)=>{
         if (sortField === field){
@@ -19,16 +29,14 @@ function Table(props){
         }else{
             setSortField(field);
         }
-        refresh();
+        
     }
 
     const handlePageSizeClick=(e)=>{
-        setPageSize(e.target.value);
-        refresh();
+        setPageSize(+e.target.value);
     }
     const handlePageIndexClick=(e)=>{
-        setPageIndex(e.target.value);
-        refresh();
+        setPageIndex(+e.target.value);
     }
 
     const getData=()=>{
@@ -45,19 +53,6 @@ function Table(props){
         return result;
     }
 
-    const refresh=()=>{
-        if (props.onRefresh){
-            props.onRefresh({
-                sort_field:sortField,
-                sort_order:sortOrder,
-                page_index:pageIndex,
-                page_size:pageSize
-            });
-        }
-    }
-
-    
-
     const getPageIndexes=()=>{
         const result=[];
         const totalRecords = props.onRefresh ? props.totalCount : props.data.length;
@@ -67,8 +62,6 @@ function Table(props){
         }
         return result;
     }
-
-    
 
     return <> 
     <div className={classes.pagintation}>

@@ -3,3 +3,10 @@
     margin-left: 20px;
     width: 218px;
 }
+
+.toggleTheme{
+    border-radius: 6px;
+    padding: 4px;
+    cursor: pointer;
+    display: inline;
+}

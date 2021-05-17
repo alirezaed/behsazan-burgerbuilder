@@ -6,23 +6,27 @@ import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../components/UI/Button/Button';
 import axios from '../../tools/fetch';
 import MessageBox from '../../components/UI/MessageBox/MessageBox';
-import {ApplicationContext} from '../../context/ApplicationContext'
+import {AuthenticationContext} from '../../context/AuthenticationContext'
 
 class BurgerBuilder extends React.Component {
-    static contextType = ApplicationContext;
-    initialState={
-        meat:1,
-        salad:1,
-        cheese:1,
-        message:'',
-        message_type:'',
-        submitting:false
+    static contextType = AuthenticationContext;
+    
+    initialState=()=>{
+        const data = this.props.location.state;
+        return {
+            meat:data ? data.meat : 1,
+            salad:data ? data.salad :1,
+            cheese:data ? data.cheese :1,
+            message:'',
+            message_type:'',
+            submitting:false
+        }
     }
 
     constructor(props){
         super(props);
 
-        this.state=this.initialState;
+        this.state=this.initialState();
     }
 
     handleChange=(label,mode)=>{
@@ -43,14 +47,19 @@ class BurgerBuilder extends React.Component {
     }
 
     handleResetClick=()=>{
-        console.log(this.context);
-        this.setState(this.initialState);
+        this.setState(this.initialState());
     }
 
     handleOkClick=()=>{
+        const {meat,cheese,salad} = this.state;
+
+        if (!this.context.isLogin){
+            this.props.history.push('/Login',{meat,cheese,salad})
+            return;
+        }
+        
         this.setState({submitting:true});
-        console.log(this.state);
-        const {meat,salad,cheese} = this.state;
+        
         axios.post('/order/addorder',{
             meat:meat,
 			cheese:cheese,
