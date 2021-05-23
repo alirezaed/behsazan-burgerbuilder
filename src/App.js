@@ -8,30 +8,36 @@ import AccessDenied from './containers/AccessDenied/AccessDenied';
 import Order from './containers/Order/Order';
 import {AppProvider} from './context/ApplicationContext';
 import {AuthenticationProvider} from './context/AuthenticationContext';
-
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import {reducer} from './store/reducer';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 
+const store = createStore(reducer);
+
 function App() {
   return (
     <AppProvider>
       <AuthenticationProvider>
-        <Router>
-          <Layout>
-            <Switch>
-              <Route path='/OrderList' component={OrderList} />  
-              <Route path='/Order/:id' component={Order} />  
-              <Route path='/Signup' component={Signup} />  
-              <Route path='/Login' component={Login} />  
-              <Route path='/AccessDenied' component={AccessDenied} />  
-              <Route path='/Timer' component={Timer} />  
-              <Route path='/' component={BurgerBuilder} />  
-            </Switch>
-          </Layout>
-        </Router>
+        <Provider store={store}>
+          <Router>
+            <Layout>
+              <Switch>
+                <Route path='/OrderList' component={OrderList} />  
+                <Route path='/Order/:id' component={Order} />  
+                <Route path='/Signup' component={Signup} />  
+                <Route path='/Login' component={Login} />  
+                <Route path='/AccessDenied' component={AccessDenied} />  
+                <Route path='/Timer' component={Timer} />  
+                <Route path='/' component={BurgerBuilder} />  
+              </Switch>
+            </Layout>
+          </Router>
+        </Provider>
       </AuthenticationProvider>
     </AppProvider>
   );

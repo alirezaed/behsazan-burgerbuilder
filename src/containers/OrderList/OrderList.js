@@ -1,7 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import axios from '../../tools/fetch';
 import Table from '../../components/UI/Table/Table';
-import Loading from '../../components/UI/Loading/Loading';
+import { useReduxDispatch } from '../../hooks/useReduxDispatch';
+import * as actionType from '../../store/actionTypes';
+import { useSelector } from 'react-redux';
 
 function reducer(currentState,action){
 
@@ -9,14 +11,9 @@ function reducer(currentState,action){
         case 'INIT': 
             return{
                 orders:action.payload.orders,
-                totalCount:action.payload.totalCount,
-                loading:false
+                totalCount:action.payload.totalCount
             };
-        case 'LOADING':
-            return{
-                ...currentState,
-                loading:true
-            };
+        
         default:return currentState;
     }
 }
@@ -24,16 +21,7 @@ function reducer(currentState,action){
 
 function OrderList(props){
 
-    // const [orders,setOrders] = useState([]);
-    // const [totalCount,setTotalCount] = useState(0);
-    // const [loading,setLoading] = useState(false);
-
-    const [state,dispatch] = useReducer(reducer,{
-        orders:[],
-        totalCount:0,
-        loading:false
-    });
-
+    const {showLoading,setOrders } = useReduxDispatch();
 
     const columns=[
         { index:1,field:'order_number', title:'Order Number',sortable:true,textAlign:'center' },
@@ -43,22 +31,10 @@ function OrderList(props){
     ];
 
     const handleRefreshTable=(data)=>{
-        dispatch({
-            type:'LOADING'
-        });
-        //setLoading(true);
+        showLoading();
         axios.post('safeorder/GetAllOrders',data)
         .then(result=>{
-            dispatch({
-                type:'INIT',
-                payload:{
-                    orders:result.data.list,
-                    totalCount:result.data.total_count
-                }
-            });
-            // setOrders(result.data.list);
-            // setTotalCount(result.data.total_count);
-            // setLoading(false);
+            setOrders(result.data.list,result.data.total_count);
         }).catch(err=>{
             if (err.response.status == 403){
                 props.history.push('/AccessDenied');
@@ -67,15 +43,23 @@ function OrderList(props){
         })
     }
 
+    const handleDivClick=(e)=>{
+        // setS1(2);
+        // setS2(2);
+    }
+
+    const orders = useSelector(store=>store.orderList);
+    const totalCount = useSelector(store=>store.totalOrderCount);
+
     console.log('orderListRendered');
-    return <div>
-        {state.loading && <Loading />}
+    return <div onClick={handleDivClick}>
+        
         <Table 
-            data={state.orders} 
+            data={orders} 
             columns={columns} 
             keyfield='order_number'
             onRefresh={handleRefreshTable}
-            totalCount={state.totalCount}
+            totalCount={totalCount}
          />
     </div>
 }
