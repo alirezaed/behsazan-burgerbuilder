@@ -6,7 +6,6 @@ const initStore={
     loading:false
 }
 
-
 export function reducer(store=initStore,action){
 
     switch(action.type){
@@ -14,6 +13,11 @@ export function reducer(store=initStore,action){
             return {
                 ...store,
                 loading:true
+            };
+        case actionType.HIDE_LOADING:
+            return {
+                ...store,
+                loading:false
             };
         case actionType.SET_ORDERS:
             return {

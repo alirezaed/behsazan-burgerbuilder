@@ -1,4 +1,4 @@
-import axios from '../../tools/fetch';
+import {useAxios} from '../../hooks/useAxios';
 import React, { useContext, useEffect } from 'react';
 import Header from './Header/Header';
 import classes from './Layout.module.css';
@@ -9,12 +9,12 @@ import { useSelector } from 'react-redux';
 function Layout(props){
 
     const authContext = useContext(AuthenticationContext);
-
+    const {post} = useAxios();
     const loading = useSelector(store=>store.loading);
     
     useEffect(()=>{
         const token = window.localStorage.getItem('token');
-        axios.post('/User/IsTokenValid',{token})
+        post('/User/IsTokenValid',{token})
             .then(result=>{
                 if (result.status){
                     authContext.login(token);

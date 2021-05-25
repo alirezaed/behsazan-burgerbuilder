@@ -7,6 +7,9 @@ import Button from '../../components/UI/Button/Button';
 import axios from '../../tools/fetch';
 import MessageBox from '../../components/UI/MessageBox/MessageBox';
 import {AuthenticationContext} from '../../context/AuthenticationContext'
+import {withLog} from '../../hoc/withLog';
+import {connect} from 'react-redux';
+import { HIDE_LOADING, SHOW_LOADING } from '../../store/actionTypes';
 
 class BurgerBuilder extends React.Component {
     static contextType = AuthenticationContext;
@@ -25,7 +28,6 @@ class BurgerBuilder extends React.Component {
 
     constructor(props){
         super(props);
-
         this.state=this.initialState();
     }
 
@@ -52,12 +54,13 @@ class BurgerBuilder extends React.Component {
 
     handleOkClick=()=>{
         const {meat,cheese,salad} = this.state;
+        const {showLoading,hideLoading,history} = this.props;
 
         if (!this.context.isLogin){
-            this.props.history.push('/Login',{meat,cheese,salad})
+            history.push('/Login',{meat,cheese,salad})
             return;
         }
-        
+        showLoading();
         this.setState({submitting:true});
         
         axios.post('/order/addorder',{
@@ -72,6 +75,7 @@ class BurgerBuilder extends React.Component {
                     message_type:'success',
                     message:`Your Order Successfully Added. Order Number Is : ${result.data.order_number} `,
                 });
+                hideLoading();
             }else{
                 this.showError(result.data.message);
             }
@@ -108,4 +112,21 @@ class BurgerBuilder extends React.Component {
     }
 }
 
-export default BurgerBuilder;
+const mapStateToProps=(state)=>{
+    return {
+        loading:state.loading
+    }
+}
+
+const mapDispatchToProps=(dispach)=>{
+    return {
+        showLoading:()=>{
+            dispach({type:SHOW_LOADING})
+        },
+        hideLoading:()=>{
+            dispach({type:HIDE_LOADING})
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withLog(BurgerBuilder));

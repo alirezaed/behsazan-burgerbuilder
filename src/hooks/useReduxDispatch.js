@@ -10,6 +10,12 @@ export function useReduxDispatch(){
         });
     }
 
+    const hideLoading=()=>{
+        dispatch({
+            type:actionType.HIDE_LOADING
+        });
+    }
+
     const setOrders=(orderList,totalCount)=>{
         dispatch({
             type:actionType.SET_ORDERS,
@@ -23,6 +29,7 @@ export function useReduxDispatch(){
 
     return{
         showLoading,
+        hideLoading,
         setOrders
     }
 
