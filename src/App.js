@@ -1,11 +1,5 @@
+import React from 'react';
 import Layout from './components/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import OrderList from './containers/OrderList/OrderList';
-import Signup from './containers/Signup/Signup';
-import Login from './containers/Login/Login';
-import Timer from './containers/VirtualDOM/Timer';
-import AccessDenied from './containers/AccessDenied/AccessDenied';
-import Order from './containers/Order/Order';
 import {AppProvider} from './context/ApplicationContext';
 import {AuthenticationProvider} from './context/AuthenticationContext';
 import {createStore} from 'redux';
@@ -16,6 +10,8 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Loading from './components/UI/Loading/Loading';
+import routes from './tools/routes';
 
 const store = createStore(reducer);
 
@@ -24,19 +20,15 @@ function App() {
     <AppProvider>
       <AuthenticationProvider>
         <Provider store={store}>
-          <Router>
-            <Layout>
-              <Switch>
-                <Route path='/OrderList' component={OrderList} />  
-                <Route path='/Order/:id' component={Order} />  
-                <Route path='/Signup' component={Signup} />  
-                <Route path='/Login' component={Login} />  
-                <Route path='/AccessDenied' component={AccessDenied} />  
-                <Route path='/Timer' component={Timer} />  
-                <Route path='/' component={BurgerBuilder} />  
-              </Switch>
-            </Layout>
-          </Router>
+          <React.Suspense fallback={<Loading />}>
+            <Router>
+              <Layout>
+                <Switch>
+                  {routes.map(item=><Route key={item.path} path={item.path} component={item.Component} />  )}
+                </Switch>
+              </Layout>
+            </Router>
+          </React.Suspense>
         </Provider>
       </AuthenticationProvider>
     </AppProvider>

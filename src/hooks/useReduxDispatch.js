@@ -26,11 +26,20 @@ export function useReduxDispatch(){
         });
     }
 
+    const addDetail=(detailType)=>{
+        dispatch({type:actionType.ADD_DETAIL,payload:detailType})
+    };
+
+    const removeDetail=(detailType)=>{
+        dispatch({type:actionType.REMOVE_DETAIL,payload:detailType})
+    };
 
     return{
         showLoading,
         hideLoading,
-        setOrders
+        setOrders,
+        addDetail,
+        removeDetail
     }
 
 
