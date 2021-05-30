@@ -3,7 +3,14 @@ import * as actionType from './actionTypes';
 const initStore={
     orderList:[],
     totalOrderCount:0,
-    loading:false
+    loading:false,
+    messageBoxModal:{
+        title:'',
+        body:'',
+        type:'',
+        onOK:()=>{},
+        onCancel:()=>{}
+    }
 }
 
 export function reducer(store=initStore,action){
@@ -26,6 +33,18 @@ export function reducer(store=initStore,action){
                 totalOrderCount:action.payload.totalCount,
                 loading:false
             };
+        case actionType.SHOW_MESSAGE_MODAL:
+            return{
+                ...store,
+                messageBoxModal:{
+                    ...action.payload
+                }
+            }
+        case actionType.HIDE_MESSAGE_MODAL:
+            return{
+                ...store,
+                messageBoxModal:{...initStore.messageBoxModal}
+            }
         default: return store;
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React from 'react';
 import {useAxios} from '../../hooks/useAxios';
 import Table from '../../components/UI/Table/Table';
 import { useReduxDispatch } from '../../hooks/useReduxDispatch';

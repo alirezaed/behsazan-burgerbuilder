@@ -1,24 +1,29 @@
 
 import classes from './Login.module.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import {useInput} from '../../hooks/useInput';
 import axios from '../../tools/fetch';
 import {AuthenticationContext} from '../../context/AuthenticationContext';
 import Loading from '../../components/UI/Loading/Loading';
+import { usePersistedState } from '../../hooks/usePersistedState';
 
 function Login (props){
 
     const authContext = useContext(AuthenticationContext);
 
     const [isLoading,setIsLoading] = useState(false);
-
+    const [firstName,setFirstName] = usePersistedState('noname');
     const username = useInput('',true);
     const password = useInput('',true);
     
     const handleSubmit=(e)=>{
         e.preventDefault();
+        setFirstName('Alireza');
+        return;
+
+        
         if (username.validate() && password.validate()){
             setIsLoading(true);
             axios.post('user/login',{
@@ -38,11 +43,12 @@ function Login (props){
         
     }
 
-    return <form className={classes.form} onSubmit={handleSubmit}>
+    return <form className={classes.form} >
         {isLoading && <Loading />}
+        {firstName}
         <Input required name="username" lable="Username" {...username}  />
         <Input required name="password" lable="Password" {...password} type="password" />
-        <Button title="Login" />
+        <Button onClick={handleSubmit} title="Login" />
     </form>
 
 }

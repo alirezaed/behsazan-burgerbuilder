@@ -34,12 +34,30 @@ export function useReduxDispatch(){
         dispatch({type:actionType.REMOVE_DETAIL,payload:detailType})
     };
 
+
+    const showMessageBoxModal=(messageBoxModalInfo)=>{
+        dispatch({
+            type:actionType.SHOW_MESSAGE_MODAL,
+            payload:{
+                ...messageBoxModalInfo
+            }
+        });
+    }
+
+    const hideMessageBoxModal=()=>{
+        dispatch({
+            type:actionType.HIDE_MESSAGE_MODAL
+        });
+    }
+
     return{
         showLoading,
         hideLoading,
         setOrders,
         addDetail,
-        removeDetail
+        removeDetail,
+        showMessageBoxModal,
+        hideMessageBoxModal
     }
 
 

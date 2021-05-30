@@ -5,11 +5,10 @@ import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../components/UI/Button/Button';
 import axios from '../../tools/fetch';
-import MessageBox from '../../components/UI/MessageBox/MessageBox';
 import {AuthenticationContext} from '../../context/AuthenticationContext'
 import {withLog} from '../../hoc/withLog';
 import {connect} from 'react-redux';
-import { HIDE_LOADING, SHOW_LOADING } from '../../store/actionTypes';
+import { HIDE_LOADING, SHOW_LOADING, SHOW_MESSAGE_MODAL } from '../../store/actionTypes';
 
 class BurgerBuilder extends React.Component {
     static contextType = AuthenticationContext;
@@ -20,8 +19,6 @@ class BurgerBuilder extends React.Component {
             meat:data ? data.meat : 1,
             salad:data ? data.salad :1,
             cheese:data ? data.cheese :1,
-            message:'',
-            message_type:'',
             submitting:false
         }
     }
@@ -54,10 +51,16 @@ class BurgerBuilder extends React.Component {
 
     handleOkClick=()=>{
         const {meat,cheese,salad} = this.state;
-        const {showLoading,hideLoading,history} = this.props;
+        const {showLoading,hideLoading,history,showMessageBoxModal} = this.props;
 
         if (!this.context.isLogin){
-            history.push('/Login',{meat,cheese,salad})
+            showMessageBoxModal({
+                title:'Please Login',
+                body:'You have to login before sending an order!',
+                onOk:()=>{
+                    history.push('/Login',{meat,cheese,salad});
+                }
+            });
             return;
         }
         showLoading();
@@ -70,10 +73,11 @@ class BurgerBuilder extends React.Component {
 			total_price:this.calculateTotalAmount()
         }).then(result=>{
             if (result.data.status){
-                this.setState({
-                    ...this.initialState,
-                    message_type:'success',
-                    message:`Your Order Successfully Added. Order Number Is : ${result.data.order_number} `,
+
+                showMessageBoxModal({
+                    title:'Successfull',
+                    body:`Your Order Successfully Added. Order Number Is : ${result.data.order_number} `,
+                    type:'success'
                 });
                 hideLoading();
             }else{
@@ -85,17 +89,18 @@ class BurgerBuilder extends React.Component {
     }
 
     showError= (message)=>{
-        this.setState({
-            message_type:'error',
-            message:message,
-            submitting:false
+        this.props.showMessageBoxModal({
+            title:'Error',
+            body:message,
+            type:'error',
+            onOk:()=>this.setState({submitting:false})
         });
     }
 
     
 
     render(){
-        const {meat,cheese,salad,message_type,message,submitting} = this.state;
+        const {meat,cheese,salad,submitting} = this.state;
 
         return <div className={classes.container} >
             <BurgerView meat={meat} salad={salad} cheese={cheese} />
@@ -107,7 +112,6 @@ class BurgerBuilder extends React.Component {
                 <Button disabled={submitting} onClick={this.handleResetClick} title="Reset" />
                 <Button disabled={submitting} onClick={this.handleOkClick} title="OK" />
             </div>
-            <MessageBox message={message} message_type={message_type} />
         </div>
     }
 }
@@ -125,6 +129,12 @@ const mapDispatchToProps=(dispach)=>{
         },
         hideLoading:()=>{
             dispach({type:HIDE_LOADING})
+        },
+        showMessageBoxModal:(info)=>{
+            dispach({
+                type:SHOW_MESSAGE_MODAL,
+                payload:{...info}
+            });
         }
     }
 }

@@ -1,0 +1,43 @@
+.container{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display:flex;
+    top:0;
+    left:0;
+    background-color: rgba(0, 0, 0, 0.329);
+    z-index: 1000;
+}
+
+.box{
+    width: 700px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: auto;
+    padding: 10px;
+    background-color: white;
+}
+
+.title{
+    font-size: 1.2em;
+    font-weight: bold;
+    border-bottom: 1px solid gray;
+    padding: 8px;
+}
+
+.body{
+    border-bottom: 1px solid gray;
+    padding: 8px;
+}
+
+.actions{
+    padding: 8px 0px;
+}
+
+.error{
+    color: red;
+}
+
+.success{
+    color: green;
+}
