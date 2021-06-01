@@ -1,21 +1,23 @@
 import React from 'react';
+import { useReduxDispatch } from '../../../hooks/useReduxDispatch';
 import classes from './Counter.module.css';
 
-function Counter({count,label, onChange}){
+function Counter({count,label}){
+
+    const {addDetail,removeDetail} = useReduxDispatch();
 
     const handleClickAdd = ()=>{
         if (count < 3){
-            onChange(label,'add');
+            addDetail(label.toLowerCase());
         }
     }
 
     const handleClickRemove = ()=>{
         if (count > 0){
-            onChange(label,'remove');
+            removeDetail(label.toLowerCase());
         }
     }
-
-    console.log(label,' rendered');
+    
     return <div className={classes.container}>
         <span className={classes.label} >{label} : </span>
         <button onClick={handleClickAdd}>+</button>
@@ -24,4 +26,4 @@ function Counter({count,label, onChange}){
     </div>
 }
 
-export default React.memo(Counter);//HOC
+export default React.memo(Counter);

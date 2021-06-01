@@ -1,6 +1,6 @@
 
 import classes from './Signup.module.css';
-import React from 'react';
+import React, { createRef } from 'react';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import axios from '../../tools/fetch';
@@ -12,7 +12,6 @@ class Signup extends React.Component{
         super(props);
 
         this.state=this.initState;
-
     }
 
     initState={
@@ -53,6 +52,8 @@ class Signup extends React.Component{
             [e.target.name]:e.target.value
         });
     }
+
+    
 
     render(){
         const {name,email,password,username,message,message_type}  = this.state;

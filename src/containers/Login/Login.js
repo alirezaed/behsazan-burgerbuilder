@@ -38,11 +38,11 @@ function Login (props){
         
     }
 
-    return <form className={classes.form} onSubmit={handleSubmit}>
+    return <form className={classes.form} >
         {isLoading && <Loading />}
         <Input required name="username" lable="Username" {...username}  />
         <Input required name="password" lable="Password" {...password} type="password" />
-        <Button title="Login" />
+        <Button onClick={handleSubmit} title="Login" />
     </form>
 
 }

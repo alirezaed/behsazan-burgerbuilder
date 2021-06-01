@@ -25,11 +25,16 @@ export function useInput(defaultValue,required){
         setValue(e.target.value);
     }
 
+    const reset=(data)=>{
+        setValue(data);
+    }
+
     return {
         value,
         onChange,
         errorMessage:message,
-        validate
+        validate,
+        reset
     }
 }
 

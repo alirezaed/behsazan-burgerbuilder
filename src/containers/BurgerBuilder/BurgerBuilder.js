@@ -7,19 +7,15 @@ import Button from '../../components/UI/Button/Button';
 import axios from '../../tools/fetch';
 import MessageBox from '../../components/UI/MessageBox/MessageBox';
 import {AuthenticationContext} from '../../context/AuthenticationContext'
-import {withLog} from '../../hoc/withLog';
-import {connect} from 'react-redux';
-import { HIDE_LOADING, SHOW_LOADING } from '../../store/actionTypes';
+import { withLog } from '../../hoc/withLog';
+import { connect } from 'react-redux';
+import { HIDE_LOADING, SHOW_LOADING,RESET_DETAIL } from '../../store/actionTypes';
 
 class BurgerBuilder extends React.Component {
     static contextType = AuthenticationContext;
     
     initialState=()=>{
-        const data = this.props.location.state;
         return {
-            meat:data ? data.meat : 1,
-            salad:data ? data.salad :1,
-            cheese:data ? data.cheese :1,
             message:'',
             message_type:'',
             submitting:false
@@ -31,16 +27,8 @@ class BurgerBuilder extends React.Component {
         this.state=this.initialState();
     }
 
-    handleChange=(label,mode)=>{
-        this.setState(currentSatet=>{
-            return {
-                [label.toLowerCase()]: currentSatet[label.toLowerCase()] + (mode ==='add' ? 1 : -1)
-            }
-        });
-    }
-
     calculateTotalAmount=()=>{
-        const {meat,cheese,salad} = this.state;
+        const {meat,cheese,salad} = this.props;
         const initialValue = 5000;
         const meatValue = meat * 5000;
         const cheeseValue = cheese * 4000;
@@ -50,11 +38,11 @@ class BurgerBuilder extends React.Component {
 
     handleResetClick=()=>{
         this.setState(this.initialState());
+        this.props.resetDetails();
     }
 
     handleOkClick=()=>{
-        const {meat,cheese,salad} = this.state;
-        const {showLoading,hideLoading,history} = this.props;
+        const {meat,cheese,salad,showLoading,hideLoading,history} = this.props;
 
         if (!this.context.isLogin){
             history.push('/Login',{meat,cheese,salad})
@@ -92,16 +80,15 @@ class BurgerBuilder extends React.Component {
         });
     }
 
-    
-
     render(){
-        const {meat,cheese,salad,message_type,message,submitting} = this.state;
+        const {message_type,message,submitting} = this.state;
+        const {meat,cheese,salad} = this.props;
 
         return <div className={classes.container} >
-            <BurgerView meat={meat} salad={salad} cheese={cheese} />
-            <Counter label="Meat" count={meat} onChange={this.handleChange} />
-            <Counter label="Cheese" count={cheese} onChange={this.handleChange} />
-            <Counter label="Salad" count={salad} onChange={this.handleChange} />
+            <BurgerView />
+            <Counter label="Meat" count={meat} />
+            <Counter label="Cheese" count={cheese} />
+            <Counter label="Salad" count={salad} />
             <TotalAmount totalAmount={this.calculateTotalAmount()} />
             <div className={classes.buttons}>
                 <Button disabled={submitting} onClick={this.handleResetClick} title="Reset" />
@@ -114,7 +101,10 @@ class BurgerBuilder extends React.Component {
 
 const mapStateToProps=(state)=>{
     return {
-        loading:state.loading
+        loading:state.loading,
+        meat:state.meat,
+        cheese:state.cheese,
+        salad:state.salad
     }
 }
 
@@ -125,8 +115,11 @@ const mapDispatchToProps=(dispach)=>{
         },
         hideLoading:()=>{
             dispach({type:HIDE_LOADING})
+        },
+        resetDetails:()=>{
+            dispach({type:RESET_DETAIL})
         }
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(withLog(BurgerBuilder));
+export default connect(mapStateToProps,mapDispatchToProps)(BurgerBuilder);

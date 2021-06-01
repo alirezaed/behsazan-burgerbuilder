@@ -63,6 +63,16 @@ function Table(props){
         return result;
     }
 
+    const handleClickRow=(item)=>{
+        if (props.onRowClick){
+            props.onRowClick(item);
+        }
+    }
+
+    const rowStyle={
+        cursor:props.onRowClick ? 'pointer' : 'default'
+    }
+
     return <> 
     <div className={classes.pagintation}>
         Page Index 
@@ -93,7 +103,7 @@ function Table(props){
             </tr>
         </thead>
         <tbody>
-            {getData().map(item=><tr key={item[props.keyfield]} >
+            {getData().map(item=><tr key={item[props.keyfield]} style={rowStyle} onClick={()=>handleClickRow(item)} >
                 {props.columns.map(col=>{
                     return <td key={col.field} >{item[col.field]}</td>
                 })}

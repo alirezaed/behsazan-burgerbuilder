@@ -16,7 +16,7 @@ function OrderList(props){
         { index:1,field:'order_number', title:'Order Number',sortable:true,textAlign:'center' },
         { index:2,field:'create_date', title:'Order Date',sortable:false,textAlign:'center' },
         { index:3,field:'total_price', title:'Price',sortable:true,textAlign:'center' },
-        { index:4,field:'comments', title:'Comments',sortable:false,textAlign:'center' }
+        { index:4,field:'comment', title:'Comments',sortable:false,textAlign:'center' }
     ];
 
     const handleRefreshTable=(data)=>{
@@ -29,12 +29,17 @@ function OrderList(props){
         })
     }
 
+    const handleRowClick=(rowData)=>{
+        props.history.push('/Order/' + rowData.order_number);
+    }
+
     return <Table 
             data={orders} 
             columns={columns} 
             keyfield='order_number'
             onRefresh={handleRefreshTable}
             totalCount={totalCount}
+            onRowClick={handleRowClick}
          />
 }
 
