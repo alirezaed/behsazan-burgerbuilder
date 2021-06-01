@@ -6,7 +6,14 @@ const initStore={
     loading:false,
     meat:0,
     cheese:0,
-    salad:0
+    salad:0,
+    messageBoxModal:{
+        title:'',
+        body:'',
+        type:'',
+        onOK:()=>{},
+        onCancel:()=>{}
+    }
 }
 
 export function reducer(store=initStore,action){
@@ -46,6 +53,18 @@ export function reducer(store=initStore,action){
                 salad:initStore.salad,
                 meat:initStore.meat
             };
+        case actionType.SHOW_MESSAGE_MODAL:
+            return{
+                ...store,
+                messageBoxModal:{
+                    ...action.payload
+                }
+            }
+        case actionType.HIDE_MESSAGE_MODAL:
+            return{
+                ...store,
+                messageBoxModal:{...initStore.messageBoxModal}
+            }
         default: return store;
     }
 }
