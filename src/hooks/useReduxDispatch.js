@@ -50,6 +50,22 @@ export function useReduxDispatch(){
         });
     }
 
+    const showToast=(title,message)=>{
+        dispatch({
+            type:actionType.SHOW_TOAST,
+            payload:{
+                title,
+                message
+            }
+        });
+    }
+
+    const hideToast=()=>{
+        dispatch({
+            type:actionType.HIDE_TOAST
+        });
+    }
+
     return{
         showLoading,
         hideLoading,
@@ -57,7 +73,9 @@ export function useReduxDispatch(){
         addDetail,
         removeDetail,
         showMessageBoxModal,
-        hideMessageBoxModal
+        hideMessageBoxModal,
+        showToast,
+        hideToast
     }
 
 

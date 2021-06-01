@@ -5,6 +5,7 @@ import classes from './Layout.module.css';
 import {AuthenticationContext } from '../../context/AuthenticationContext';
 import Loading from '../../components/UI/Loading/Loading';
 import MessageBoxModal from '../../components/UI/MessageBoxModal/MessageBoxModal';
+import Toast from '../../components/UI/Toast/Toast';
 import { useSelector } from 'react-redux';
 
 function Layout(props){
@@ -26,7 +27,8 @@ function Layout(props){
 
     return <div className={classes.container}>
         {loading && <Loading />}
-        {<MessageBoxModal />}
+        <MessageBoxModal />
+        <Toast />
         <Header />
         <div className={classes.mainbody}>
             {props.children}

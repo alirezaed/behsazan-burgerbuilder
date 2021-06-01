@@ -13,6 +13,7 @@ import {
 import Loading from './components/UI/Loading/Loading';
 import routes from './tools/routes';
 
+
 const store = createStore(reducer);
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
             <Router>
               <Layout>
                 <Switch>
-                  {routes.map(item=><Route key={item.path} path={item.path} component={item.component} />  )}
+                  {routes.map(item=><Route key={item.path} path={item.path} component={item.Component} />  )}
                 </Switch>
               </Layout>
             </Router>

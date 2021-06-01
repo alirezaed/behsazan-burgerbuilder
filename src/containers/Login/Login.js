@@ -8,6 +8,7 @@ import axios from '../../tools/fetch';
 import {AuthenticationContext} from '../../context/AuthenticationContext';
 import Loading from '../../components/UI/Loading/Loading';
 import { usePersistedState } from '../../hooks/usePersistedState';
+import { useReduxDispatch } from '../../hooks/useReduxDispatch';
 
 function Login (props){
 
@@ -17,13 +18,9 @@ function Login (props){
     const [firstName,setFirstName] = usePersistedState('noname');
     const username = useInput('',true);
     const password = useInput('',true);
-    
+    const {showToast} = useReduxDispatch();
     const handleSubmit=(e)=>{
         e.preventDefault();
-        setFirstName('Alireza');
-        return;
-
-        
         if (username.validate() && password.validate()){
             setIsLoading(true);
             axios.post('user/login',{
@@ -32,6 +29,7 @@ function Login (props){
             }).then(result=>{
                 if (result.data.status){
                     authContext.login(result.data.message);
+                    showToast('Success','Wellcome!');
                     props.history.push('/', props.location.state);
                 }
                 setIsLoading(false);

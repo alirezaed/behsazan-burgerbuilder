@@ -13,6 +13,11 @@ const initStore={
         type:'',
         onOK:()=>{},
         onCancel:()=>{}
+    },
+    toast:{
+        show:false,
+        title:'',
+        message:''
     }
 }
 
@@ -64,6 +69,21 @@ export function reducer(store=initStore,action){
             return{
                 ...store,
                 messageBoxModal:{...initStore.messageBoxModal}
+            }
+        case actionType.SHOW_TOAST:
+            return{
+                ...store,
+                toast:{
+                    ...action.payload,
+                    show:true
+                }
+            }
+        case actionType.HIDE_TOAST:
+            return{
+                ...store,
+                toast:{
+                    ...initStore.toast
+                }
             }
         default: return store;
     }
