@@ -1,24 +1,21 @@
 
 import classes from './Login.module.css';
-import React, { useContext, useState } from 'react';
+import React, {  useState } from 'react';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import {useInput} from '../../hooks/useInput';
 import axios from '../../tools/fetch';
-import {AuthenticationContext} from '../../context/AuthenticationContext';
 import Loading from '../../components/UI/Loading/Loading';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useReduxDispatch } from '../../hooks/useReduxDispatch';
 
 function Login (props){
 
-    const authContext = useContext(AuthenticationContext);
-
     const [isLoading,setIsLoading] = useState(false);
     const [firstName,setFirstName] = usePersistedState('noname');
     const username = useInput('',true);
     const password = useInput('',true);
-    const {showToast} = useReduxDispatch();
+    const {showToast,login} = useReduxDispatch();
     const handleSubmit=(e)=>{
         e.preventDefault();
         if (username.validate() && password.validate()){
@@ -28,7 +25,7 @@ function Login (props){
                 password:password.value
             }).then(result=>{
                 if (result.data.status){
-                    authContext.login(result.data.message);
+                    login(result.data.message);
                     showToast('Success','Wellcome!');
                     props.history.push('/', props.location.state);
                 }

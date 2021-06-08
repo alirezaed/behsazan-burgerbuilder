@@ -1,4 +1,5 @@
 import * as actionType from './actionTypes';
+import jwt_decode from 'jwt-decode';
 
 const initStore={
     orderList:[],
@@ -18,7 +19,9 @@ const initStore={
         show:false,
         title:'',
         message:''
-    }
+    },
+    isLogin:false,
+    username:'',
 }
 
 export function reducer(store=initStore,action){
@@ -84,6 +87,21 @@ export function reducer(store=initStore,action){
                 toast:{
                     ...initStore.toast
                 }
+            }
+        case actionType.LOGIN:
+            window.localStorage.setItem('token',action.payload);
+            const payload = jwt_decode(action.payload);
+                return{
+                    ...store,
+                    isLogin:true,
+                    username:payload && payload.username
+                }
+        case actionType.LOGOUT:
+            window.localStorage.removeItem('token');
+            return{
+                ...store,
+                isLogin:false,
+                username:''
             }
         default: return store;
     }

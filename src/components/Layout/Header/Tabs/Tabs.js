@@ -8,7 +8,7 @@ function Tabs(){
 
     return <div className={classes.container}>
         {authContext.isLogin && <TabLink to="/OrderList" >Order List</TabLink>}
-        <TabLink to="/" >Burger Builder</TabLink>
+        <TabLink to="/BurgerBuilder" >Burger Builder</TabLink>
     </div>
 }
 

@@ -1,69 +1,51 @@
-import * as actionType from '../store/actionTypes';
+import * as actions from '../store/actionCreator';
 import {useDispatch} from 'react-redux';
 
 export function useReduxDispatch(){
 
     const dispatch = useDispatch();
     const showLoading=()=>{
-        dispatch({
-            type:actionType.SHOW_LOADING
-        });
+        dispatch(actions.show_loading());
     }
 
     const hideLoading=()=>{
-        dispatch({
-            type:actionType.HIDE_LOADING
-        });
+        dispatch(actions.hide_loading());
     }
 
     const setOrders=(orderList,totalCount)=>{
-        dispatch({
-            type:actionType.SET_ORDERS,
-            payload:{
-                orderList,
-                totalCount
-            }
-        });
+        dispatch(actions.set_orders(orderList,totalCount));
     }
 
     const addDetail=(detailType)=>{
-        dispatch({type:actionType.ADD_DETAIL,payload:detailType})
+        dispatch(actions.add_detail(detailType))
     };
 
     const removeDetail=(detailType)=>{
-        dispatch({type:actionType.REMOVE_DETAIL,payload:detailType})
+        dispatch(actions.remove_detail(detailType))
     };
 
-
     const showMessageBoxModal=(messageBoxModalInfo)=>{
-        dispatch({
-            type:actionType.SHOW_MESSAGE_MODAL,
-            payload:{
-                ...messageBoxModalInfo
-            }
-        });
+        dispatch(actions.show_messagebox_modal(messageBoxModalInfo));
     }
 
     const hideMessageBoxModal=()=>{
-        dispatch({
-            type:actionType.HIDE_MESSAGE_MODAL
-        });
+        dispatch(actions.hide_messagebox_modal());    
     }
 
     const showToast=(title,message)=>{
-        dispatch({
-            type:actionType.SHOW_TOAST,
-            payload:{
-                title,
-                message
-            }
-        });
+        dispatch(actions.show_toast(title,message));
     }
 
     const hideToast=()=>{
-        dispatch({
-            type:actionType.HIDE_TOAST
-        });
+        dispatch(actions.hide_toast());
+    }
+
+    const login=(token)=>{
+        dispatch(actions.login(token))
+    }
+
+    const logout=()=>{
+        dispatch(actions.logout())
     }
 
     return{
@@ -75,7 +57,9 @@ export function useReduxDispatch(){
         showMessageBoxModal,
         hideMessageBoxModal,
         showToast,
-        hideToast
+        hideToast,
+        login,
+        logout
     }
 
 

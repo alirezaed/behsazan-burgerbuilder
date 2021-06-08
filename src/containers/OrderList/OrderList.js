@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {useAxios} from '../../hooks/useAxios';
 import Table from '../../components/UI/Table/Table';
 import { useReduxDispatch } from '../../hooks/useReduxDispatch';
@@ -6,8 +6,25 @@ import { useSelector } from 'react-redux';
 
 function OrderList(props){
 
+    const [price,setPrice] = useState(0);
     const {showLoading,setOrders } = useReduxDispatch();
     const {post} = useAxios();
+
+    const getPrice=React.useCallback(()=>{
+        const x = 9000;
+        const y = x * 10;
+        return y + price;
+    },[price]);
+
+    const calculatedPrice = React.useMemo(()=>{
+        const x = 9000;
+        const y = x * 10;
+        return y + price;
+    },[price]);
+
+    const refSample = useRef({
+        count:10
+    });
 
     const orders = useSelector(store=>store.orderList);
     const totalCount = useSelector(store=>store.totalOrderCount);
@@ -33,14 +50,17 @@ function OrderList(props){
         props.history.push('/Order/' + rowData.order_number);
     }
 
-    return <Table 
+    return <>
+        <div onClick={()=>{setPrice(200)}} >Price is : {getPrice()}</div>
+        <div onClick={()=>{refSample.current.count = 20}} >current count : {refSample.current.count}</div>
+        <Table 
             data={orders} 
             columns={columns} 
             keyfield='order_number'
             onRefresh={handleRefreshTable}
             totalCount={totalCount}
             onRowClick={handleRowClick}
-         />
+         /></>
 }
 
 export default OrderList;

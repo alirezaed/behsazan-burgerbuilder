@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
 import classes from './AccountBottons.module.css';
 import TabLink  from '../../../../components/UI/TabLink/TabLink';
-import {AuthenticationContext} from'../../../../context/AuthenticationContext';
 import {ApplicationContext} from'../../../../context/ApplicationContext';
+import { useReduxDispatch } from '../../../../hooks/useReduxDispatch';
+import { useSelector } from 'react-redux';
 
 function AccountButtons(){
 
-    const authContext = useContext(AuthenticationContext);
     const appContext = useContext(ApplicationContext);
-
+    const { logout } = useReduxDispatch();
+    const isLogin = useSelector(store=>store.isLogin);
+    const username = useSelector(store=>store.username);
     const handleLogout=()=>{
-        authContext.logout();
+        logout();
     }
 
     const handleToggleClick=()=>{
@@ -23,10 +25,10 @@ function AccountButtons(){
     }
 
     return <div className={classes.container}>
-        {!authContext.isLogin && <TabLink to="/Login" >Login</TabLink>}
-        {!authContext.isLogin && <TabLink to="/Signup" >Signup</TabLink>}
-        {!!authContext.isLogin && <TabLink to="/dasdasd" onClick={handleLogout} >Logout</TabLink>}
-        {!!authContext.isLogin && <TabLink to="/Profile" >{authContext.username}</TabLink>}
+        {!isLogin && <TabLink to="/Login" >Login</TabLink>}
+        {!isLogin && <TabLink to="/Signup" >Signup</TabLink>}
+        {!!isLogin && <TabLink to="/dasdasd" onClick={handleLogout} >Logout</TabLink>}
+        {!!isLogin && <TabLink to="/Profile" >{username}</TabLink>}
         <div className={classes.toggleTheme} style={toggleStyle} onClick={handleToggleClick}>
             {appContext.theme}
         </div>

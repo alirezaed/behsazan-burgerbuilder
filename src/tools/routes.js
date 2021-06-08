@@ -14,7 +14,8 @@ const routes = [
     {path:'/AccessDenied',Component:AccessDenied},
     {path:'/Order',Component:Order},
     {path:'/OrderList',Component:OrderList},
-    {path:'/',Component:BurgerBuilder},
+    {path:'/BurgerBuilder',Component:BurgerBuilder},
+    {path:'/',Component:()=><div>PAGE NOT FOUND</div>},
 ]
 
 export default routes;

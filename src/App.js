@@ -19,7 +19,6 @@ const store = createStore(reducer);
 function App() {
   return (
     <AppProvider>
-      <AuthenticationProvider>
         <Provider store={store}>
           <React.Suspense fallback={<Loading />}>
             <Router>
@@ -31,7 +30,6 @@ function App() {
             </Router>
           </React.Suspense>
         </Provider>
-      </AuthenticationProvider>
     </AppProvider>
   );
   }
