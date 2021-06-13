@@ -1,9 +1,12 @@
 import * as actions from '../store/actionCreator';
+import * as asyncActions from '../store/asyncActions';
 import {useDispatch} from 'react-redux';
+import { useHistory } from 'react-router';
 
 export function useReduxDispatch(){
 
     const dispatch = useDispatch();
+    const history = useHistory();
     const showLoading=()=>{
         dispatch(actions.show_loading());
     }
@@ -40,18 +43,22 @@ export function useReduxDispatch(){
         dispatch(actions.hide_toast());
     }
 
-    const login=(token)=>{
-        dispatch(actions.login(token))
+    const login=(username,password)=>{
+        dispatch(asyncActions.login(username,password,history));
     }
 
     const logout=()=>{
         dispatch(actions.logout())
     }
 
+    const loadOrders=(data)=>{
+        dispatch(asyncActions.loadOrders(data));
+    }
+
     return{
         showLoading,
         hideLoading,
-        setOrders,
+        loadOrders,
         addDetail,
         removeDetail,
         showMessageBoxModal,

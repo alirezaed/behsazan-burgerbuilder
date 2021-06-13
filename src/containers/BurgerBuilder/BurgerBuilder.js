@@ -4,14 +4,12 @@ import BurgerView from './BurgerView/BurgerView';
 import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../components/UI/Button/Button';
-import axios from '../../tools/fetch';
-import {AuthenticationContext} from '../../context/AuthenticationContext'
 import { withLog } from '../../hoc/withLog';
 import { connect } from 'react-redux';
-import { HIDE_LOADING, SHOW_LOADING,RESET_DETAIL,SHOW_MESSAGE_MODAL } from '../../store/actionTypes';
+import * as actions from '../../store/actionCreator';
+import * as asyncActions from '../../store/asyncActions';
 
 class BurgerBuilder extends React.Component {
-    static contextType = AuthenticationContext;
     
     initialState=()=>{
         return {
@@ -39,9 +37,9 @@ class BurgerBuilder extends React.Component {
     }
 
     handleOkClick=()=>{
-        const {meat,cheese,salad,showLoading,hideLoading,history,showMessageBoxModal} = this.props;
+        const {meat,cheese,salad,history,showMessageBoxModal} = this.props;
 
-        if (!this.context.isLogin){
+        if (!this.props.isLogin){
             showMessageBoxModal({
                 title:'Please Login',
                 body:'You have to login before sending an order!',
@@ -51,29 +49,14 @@ class BurgerBuilder extends React.Component {
             });
             return;
         }
-        showLoading();
         this.setState({submitting:true});
-        
-        axios.post('/order/addorder',{
+        this.props.saveOrder({
             meat:meat,
 			cheese:cheese,
 			salad:salad,
 			total_price:this.calculateTotalAmount()
-        }).then(result=>{
-            if (result.data.status){
-
-                showMessageBoxModal({
-                    title:'Successfull',
-                    body:`Your Order Successfully Added. Order Number Is : ${result.data.order_number} `,
-                    type:'success'
-                });
-                hideLoading();
-            }else{
-                this.showError(result.data.message);
-            }
-        }).catch(error=>{
-            this.showError(error);
         });
+        
     }
 
     showError= (message)=>{
@@ -108,26 +91,21 @@ const mapStateToProps=(state)=>{
         loading:state.loading,
         meat:state.meat,
         cheese:state.cheese,
-        salad:state.salad
+        salad:state.salad,
+        isLogin:state.isLogin
     }
 }
 
 const mapDispatchToProps=(dispach)=>{
     return {
-        showLoading:()=>{
-            dispach({type:SHOW_LOADING})
-        },
-        hideLoading:()=>{
-            dispach({type:HIDE_LOADING})
-        },
         resetDetails:()=>{
-            dispach({type:RESET_DETAIL});
+            dispach(actions.reset_details());
         },
         showMessageBoxModal:(info)=>{
-            dispach({
-                type:SHOW_MESSAGE_MODAL,
-                payload:{...info}
-            });
+            dispach(actions.show_messagebox_modal(info));
+        },
+        saveOrder:(data)=>{
+            dispach(asyncActions.saveOrder(data));
         }
     }
 }

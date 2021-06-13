@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import {useAxios} from '../../hooks/useAxios';
 import Table from '../../components/UI/Table/Table';
 import { useReduxDispatch } from '../../hooks/useReduxDispatch';
 import { useSelector } from 'react-redux';
@@ -7,9 +6,8 @@ import { useSelector } from 'react-redux';
 function OrderList(props){
 
     const [price,setPrice] = useState(0);
-    const {showLoading,setOrders } = useReduxDispatch();
-    const {post} = useAxios();
-
+    const {loadOrders } = useReduxDispatch();
+    
     const getPrice=React.useCallback(()=>{
         const x = 9000;
         const y = x * 10;
@@ -37,13 +35,7 @@ function OrderList(props){
     ];
 
     const handleRefreshTable=(data)=>{
-        showLoading();
-        post('safeorder/GetAllOrders',data)
-        .then(result=>{
-            setOrders(result.list,result.total_count);
-        }).catch(err=>{
-            console.log(err);
-        })
+        loadOrders(data);
     }
 
     const handleRowClick=(rowData)=>{

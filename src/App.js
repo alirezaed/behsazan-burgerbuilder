@@ -1,8 +1,7 @@
 import React from 'react';
 import Layout from './components/Layout/Layout';
 import {AppProvider} from './context/ApplicationContext';
-import {AuthenticationProvider} from './context/AuthenticationContext';
-import {createStore} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import {reducer} from './store/reducer';
 import {
@@ -12,9 +11,13 @@ import {
 } from "react-router-dom";
 import Loading from './components/UI/Loading/Loading';
 import routes from './tools/routes';
+import thunk from 'redux-thunk';
+import axios from './tools/fetch';
 
-
-const store = createStore(reducer);
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk.withExtraArgument({ axios }))
+);
 
 function App() {
   return (

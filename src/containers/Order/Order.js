@@ -11,6 +11,7 @@ function Order(props){
     const {showLoading,hideLoading} = useReduxDispatch();
     const comment = useInput();
     const {post} = useAxios();
+    
     useEffect(()=>{
         post('/safeorder/GetOrder',{order_number:props.match.params.id})
             .then(result=>{

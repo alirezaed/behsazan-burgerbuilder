@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import jwt_decode from "jwt-decode";
 
-export const AuthenticationContext = React.createContext({
+const AuthenticationContext = React.createContext({
     isLogin:false,
     username:'',
     login:()=>{},
@@ -9,7 +9,7 @@ export const AuthenticationContext = React.createContext({
 });
 
 
-export function AuthenticationProvider(props){
+function AuthenticationProvider(props){
 
     const [isLogin,setIsLogin] = useState(false);
     const [username,setUsername] = useState('');

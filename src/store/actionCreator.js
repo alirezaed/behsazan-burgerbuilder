@@ -21,6 +21,10 @@ export const add_detail=(detailType)=>({
     payload:detailType
 });
 
+export const reset_details=()=>({
+    type:actionType.RESET_DETAIL
+});
+
 export const remove_detail=(detailType)=>({
     type:actionType.REMOVE_DETAIL,
     payload:detailType
