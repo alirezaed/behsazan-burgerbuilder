@@ -1,0 +1,17 @@
+https://reqres.in/api/register
+
+Register > https://reqres.in/api/register
+Users > https://reqres.in/api/users?page=1
+Logout >
+
+redux
+thunk
+router
+bootstrap
+hook
+ 
+store
+state
+props
+
+clean
